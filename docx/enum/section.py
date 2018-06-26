@@ -6,10 +6,9 @@ Enumerations related to the main document in WordprocessingML files
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from .base import alias, XmlEnumeration, XmlMappedEnumMember
+from .base import XmlEnumeration, XmlMappedEnumMember
 
 
-@alias('WD_ORIENT')
 class WD_ORIENTATION(XmlEnumeration):
     """
     alias: **WD_ORIENT**
@@ -38,7 +37,9 @@ class WD_ORIENTATION(XmlEnumeration):
     )
 
 
-@alias('WD_SECTION')
+WD_ORIENT = WD_ORIENTATION
+
+
 class WD_SECTION_START(XmlEnumeration):
     """
     alias: **WD_SECTION**
@@ -74,3 +75,6 @@ class WD_SECTION_START(XmlEnumeration):
             'ODD_PAGE', 4, 'oddPage', 'Section begins on next odd page.'
         ),
     )
+
+
+WD_SECTION = WD_SECTION_START

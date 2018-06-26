@@ -12,12 +12,11 @@ from __future__ import absolute_import, print_function
 import pytest
 
 from docx.enum.base import (
-    alias, Enumeration, EnumMember, ReturnValueOnlyEnumMember,
+    Enumeration, EnumMember, ReturnValueOnlyEnumMember,
     XmlEnumeration, XmlMappedEnumMember
 )
 
 
-@alias('BARFOO')
 class FOOBAR(Enumeration):
     """
     Enumeration docstring
@@ -34,7 +33,6 @@ class FOOBAR(Enumeration):
     )
 
 
-@alias('XML-FU')
 class XMLFOO(XmlEnumeration):
     """
     XmlEnumeration docstring
@@ -73,9 +71,6 @@ class DescribeEnumeration(object):
             FOOBAR.validate('foobar')
         with pytest.raises(ValueError):
             FOOBAR.validate(FOOBAR.READ_ONLY)
-
-    def it_can_be_referred_to_by_a_convenience_alias_if_defined(self):
-        assert BARFOO is FOOBAR  # noqa
 
 
 class DescribeEnumValue(object):

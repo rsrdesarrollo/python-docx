@@ -18,11 +18,11 @@ class Table(Parented):
     """
     def __init__(self, tbl, parent):
         super(Table, self).__init__(parent)
-        self._element = self._tbl = tbl
+        self._element = self._tbl = self.element = tbl
 
     def add_column(self, width):
         """
-        Return a |_Column| object of *width*, newly added rightmost to the
+        Return a |Column| object of *width*, newly added rightmost to the
         table.
         """
         tblGrid = self._tbl.tblGrid
@@ -31,18 +31,18 @@ class Table(Parented):
         for tr in self._tbl.tr_lst:
             tc = tr.add_tc()
             tc.width = width
-        return _Column(gridCol, self)
+        return Column(gridCol, self)
 
     def add_row(self):
         """
-        Return a |_Row| instance, newly added bottom-most to the table.
+        Return a |Row| instance, newly added bottom-most to the table.
         """
         tbl = self._tbl
         tr = tbl.add_tr()
         for gridCol in tbl.tblGrid.gridCol_lst:
             tc = tr.add_tc()
             tc.width = gridCol.w
-        return _Row(tr, self)
+        return Row(tr, self)
 
     @property
     def alignment(self):
@@ -52,11 +52,11 @@ class Table(Parented):
         setting is specified, causing the effective value to be inherited
         from the style hierarchy.
         """
-        return self._tblPr.alignment
+        return self.tblPr.alignment
 
     @alignment.setter
     def alignment(self, value):
-        self._tblPr.alignment = value
+        self.tblPr.alignment = value
 
     @property
     def autofit(self):
@@ -66,51 +66,51 @@ class Table(Parented):
         are adjusted in either case if total column width exceeds page width.
         Read/write boolean.
         """
-        return self._tblPr.autofit
+        return self.tblPr.autofit
 
     @autofit.setter
     def autofit(self, value):
-        self._tblPr.autofit = value
+        self.tblPr.autofit = value
 
     def cell(self, row_idx, col_idx):
         """
-        Return |_Cell| instance correponding to table cell at *row_idx*,
+        Return |Cell| instance correponding to table cell at *row_idx*,
         *col_idx* intersection, where (0, 0) is the top, left-most cell.
         """
-        cell_idx = col_idx + (row_idx * self._column_count)
-        return self._cells[cell_idx]
+        cell_idx = col_idx + (row_idx * self.column_count)
+        return self.cells[cell_idx]
 
     def column_cells(self, column_idx):
         """
         Sequence of cells in the column at *column_idx* in this table.
         """
-        cells = self._cells
-        idxs = range(column_idx, len(cells), self._column_count)
+        cells = self.cells
+        idxs = range(column_idx, len(cells), self.column_count)
         return [cells[idx] for idx in idxs]
 
     @lazyproperty
     def columns(self):
         """
-        |_Columns| instance representing the sequence of columns in this
+        |Columns| instance representing the sequence of columns in this
         table.
         """
-        return _Columns(self._tbl, self)
+        return Columns(self._tbl, self)
 
     def row_cells(self, row_idx):
         """
         Sequence of cells in the row at *row_idx* in this table.
         """
-        column_count = self._column_count
+        column_count = self.column_count
         start = row_idx * column_count
         end = start + column_count
-        return self._cells[start:end]
+        return self.cells[start:end]
 
     @lazyproperty
     def rows(self):
         """
-        |_Rows| instance containing the sequence of rows in this table.
+        |Rows| instance containing the sequence of rows in this table.
         """
-        return _Rows(self._tbl, self)
+        return Rows(self._tbl, self)
 
     @property
     def style(self):
@@ -159,13 +159,13 @@ class Table(Parented):
         self._element.bidiVisual_val = value
 
     @property
-    def _cells(self):
+    def cells(self):
         """
-        A sequence of |_Cell| objects, one for each cell of the layout grid.
-        If the table contains a span, one or more |_Cell| object references
+        A sequence of |Cell| objects, one for each cell of the layout grid.
+        If the table contains a span, one or more |Cell| object references
         are repeated.
         """
-        col_count = self._column_count
+        col_count = self.column_count
         cells = []
         for tc in self._tbl.iter_tcs():
             for grid_span_idx in range(tc.grid_span):
@@ -174,28 +174,28 @@ class Table(Parented):
                 elif grid_span_idx > 0:
                     cells.append(cells[-1])
                 else:
-                    cells.append(_Cell(tc, self))
+                    cells.append(Cell(tc, self))
         return cells
 
     @property
-    def _column_count(self):
+    def column_count(self):
         """
         The number of grid columns in this table.
         """
         return self._tbl.col_count
 
     @property
-    def _tblPr(self):
+    def tblPr(self):
         return self._tbl.tblPr
 
 
-class _Cell(BlockItemContainer):
+class Cell(BlockItemContainer):
     """
     Table cell
     """
     def __init__(self, tc, parent):
-        super(_Cell, self).__init__(tc, parent)
-        self._tc = tc
+        super(Cell, self).__init__(tc, parent)
+        self._tc = self.element = tc
 
     def add_paragraph(self, text='', style=None):
         """
@@ -209,7 +209,7 @@ class _Cell(BlockItemContainer):
         a tab. *text* can also include newline (``\\n``) or carriage return
         (``\\r``) characters, each of which is converted to a line break.
         """
-        return super(_Cell, self).add_paragraph(text, style)
+        return super(Cell, self).add_paragraph(text, style)
 
     def add_table(self, rows, cols):
         """
@@ -219,7 +219,7 @@ class _Cell(BlockItemContainer):
         the last element in every cell.
         """
         width = self.width if self.width is not None else Inches(1)
-        table = super(_Cell, self).add_table(rows, cols, width)
+        table = super(Cell, self).add_table(rows, cols, width)
         self.add_paragraph()
         return table
 
@@ -231,7 +231,7 @@ class _Cell(BlockItemContainer):
         """
         tc, tc_2 = self._tc, other_cell._tc
         merged_tc = tc.merge(tc_2)
-        return _Cell(merged_tc, self._parent)
+        return Cell(merged_tc, self._parent)
 
     @property
     def paragraphs(self):
@@ -240,14 +240,14 @@ class _Cell(BlockItemContainer):
         at least one block-level element and end with a paragraph. By
         default, a new cell contains a single paragraph. Read-only
         """
-        return super(_Cell, self).paragraphs
+        return super(Cell, self).paragraphs
 
     @property
     def tables(self):
         """
         List of tables in the cell, in the order they appear. Read-only.
         """
-        return super(_Cell, self).tables
+        return super(Cell, self).tables
 
     @property
     def text(self):
@@ -282,18 +282,18 @@ class _Cell(BlockItemContainer):
         self._tc.width = value
 
 
-class _Column(Parented):
+class Column(Parented):
     """
     Table column
     """
     def __init__(self, gridCol, parent):
-        super(_Column, self).__init__(parent)
+        super(Column, self).__init__(parent)
         self._gridCol = gridCol
 
     @property
     def cells(self):
         """
-        Sequence of |_Cell| instances corresponding to cells in this column.
+        Sequence of |Cell| instances corresponding to cells in this column.
         """
         return tuple(self.table.column_cells(self._index))
 
@@ -324,13 +324,13 @@ class _Column(Parented):
         return self._gridCol.gridCol_idx
 
 
-class _Columns(Parented):
+class Columns(Parented):
     """
-    Sequence of |_Column| instances corresponding to the columns in a table.
+    Sequence of |Column| instances corresponding to the columns in a table.
     Supports ``len()``, iteration and indexed access.
     """
     def __init__(self, tbl, parent):
-        super(_Columns, self).__init__(parent)
+        super(Columns, self).__init__(parent)
         self._tbl = tbl
 
     def __getitem__(self, idx):
@@ -342,11 +342,11 @@ class _Columns(Parented):
         except IndexError:
             msg = "column index [%d] is out of range" % idx
             raise IndexError(msg)
-        return _Column(gridCol, self)
+        return Column(gridCol, self)
 
     def __iter__(self):
         for gridCol in self._gridCol_lst:
-            yield _Column(gridCol, self)
+            yield Column(gridCol, self)
 
     def __len__(self):
         return len(self._gridCol_lst)
@@ -368,18 +368,18 @@ class _Columns(Parented):
         return tblGrid.gridCol_lst
 
 
-class _Row(Parented):
+class Row(Parented):
     """
     Table row
     """
     def __init__(self, tr, parent):
-        super(_Row, self).__init__(parent)
+        super(Row, self).__init__(parent)
         self._tr = tr
 
     @property
     def cells(self):
         """
-        Sequence of |_Cell| instances corresponding to cells in this row.
+        Sequence of |Cell| instances corresponding to cells in this row.
         """
         return tuple(self.table.row_cells(self._index))
 
@@ -398,13 +398,13 @@ class _Row(Parented):
         return self._tr.tr_idx
 
 
-class _Rows(Parented):
+class Rows(Parented):
     """
-    Sequence of |_Row| objects corresponding to the rows in a table.
+    Sequence of |Row| objects corresponding to the rows in a table.
     Supports ``len()``, iteration, indexed access, and slicing.
     """
     def __init__(self, tbl, parent):
-        super(_Rows, self).__init__(parent)
+        super(Rows, self).__init__(parent)
         self._tbl = tbl
 
     def __getitem__(self, idx):
@@ -414,7 +414,7 @@ class _Rows(Parented):
         return list(self)[idx]
 
     def __iter__(self):
-        return (_Row(tr, self) for tr in self._tbl.tr_lst)
+        return (Row(tr, self) for tr in self._tbl.tr_lst)
 
     def __len__(self):
         return len(self._tbl.tr_lst)

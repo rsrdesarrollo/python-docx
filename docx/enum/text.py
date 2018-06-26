@@ -6,10 +6,9 @@ Enumerations related to text in WordprocessingML files
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from .base import alias, EnumMember, XmlEnumeration, XmlMappedEnumMember
+from .base import EnumMember, XmlEnumeration, XmlMappedEnumMember
 
 
-@alias('WD_ALIGN_PARAGRAPH')
 class WD_PARAGRAPH_ALIGNMENT(XmlEnumeration):
     """
     alias: **WD_ALIGN_PARAGRAPH**
@@ -43,25 +42,28 @@ class WD_PARAGRAPH_ALIGNMENT(XmlEnumeration):
         ),
         XmlMappedEnumMember(
             'DISTRIBUTE', 4, 'distribute', 'Paragraph characters are distrib'
-            'uted to fill the entire width of the paragraph.'
+                                           'uted to fill the entire width of the paragraph.'
         ),
         XmlMappedEnumMember(
             'JUSTIFY_MED', 5, 'mediumKashida', 'Justified with a medium char'
-            'acter compression ratio.'
+                                               'acter compression ratio.'
         ),
         XmlMappedEnumMember(
             'JUSTIFY_HI', 7, 'highKashida', 'Justified with a high character'
-            ' compression ratio.'
+                                            ' compression ratio.'
         ),
         XmlMappedEnumMember(
             'JUSTIFY_LOW', 8, 'lowKashida', 'Justified with a low character '
-            'compression ratio.'
+                                            'compression ratio.'
         ),
         XmlMappedEnumMember(
             'THAI_JUSTIFY', 9, 'thaiDistribute', 'Justified according to Tha'
-            'i formatting layout.'
+                                                 'i formatting layout.'
         ),
     )
+
+
+WD_ALIGN_PARAGRAPH = WD_PARAGRAPH_ALIGNMENT
 
 
 class WD_BREAK_TYPE(object):
@@ -81,10 +83,10 @@ class WD_BREAK_TYPE(object):
     SECTION_ODD_PAGE = 5
     TEXT_WRAPPING = 11
 
+
 WD_BREAK = WD_BREAK_TYPE
 
 
-@alias('WD_COLOR')
 class WD_COLOR_INDEX(XmlEnumeration):
     """
     Specifies a standard preset color to apply. Used for font highlighting and
@@ -153,6 +155,9 @@ class WD_COLOR_INDEX(XmlEnumeration):
     )
 
 
+WD_COLOR = WD_COLOR_INDEX
+
+
 class WD_LINE_SPACING(XmlEnumeration):
     """
     Specifies a line spacing format to be applied to a paragraph.
@@ -175,19 +180,19 @@ class WD_LINE_SPACING(XmlEnumeration):
         ),
         XmlMappedEnumMember(
             'AT_LEAST', 3, 'atLeast', 'Line spacing is always at least the s'
-            'pecified amount. The amount is specified separately.'
+                                      'pecified amount. The amount is specified separately.'
         ),
         EnumMember(
             'DOUBLE', 2, 'Double spaced.'
         ),
         XmlMappedEnumMember(
             'EXACTLY', 4, 'exact', 'Line spacing is exactly the specified am'
-            'ount. The amount is specified separately.'
+                                   'ount. The amount is specified separately.'
         ),
         XmlMappedEnumMember(
             'MULTIPLE', 5, 'auto', 'Line spacing is specified as a multiple '
-            'of line heights. Changing the font size will change the line sp'
-            'acing proportionately.'
+                                   'of line heights. Changing the font size will change the line sp'
+                                   'acing proportionately.'
         ),
         EnumMember(
             'SINGLE', 0, 'Single spaced (default).'
@@ -281,21 +286,21 @@ class WD_UNDERLINE(XmlEnumeration):
     __members__ = (
         XmlMappedEnumMember(
             None, None, None, 'Inherit underline setting from containing par'
-            'agraph.'
+                              'agraph.'
         ),
         XmlMappedEnumMember(
             'NONE', 0, 'none', 'No underline. This setting overrides any inh'
-            'erited underline value, so can be used to remove underline from'
-            ' a run that inherits underlining from its containing paragraph.'
-            ' Note this is not the same as assigning |None| to Run.underline'
-            '. |None| is a valid assignment value, but causes the run to inh'
-            'erit its underline value. Assigning ``WD_UNDERLINE.NONE`` cause'
-            's underlining to be unconditionally turned off.'
+                               'erited underline value, so can be used to remove underline from'
+                               ' a run that inherits underlining from its containing paragraph.'
+                               ' Note this is not the same as assigning |None| to Run.underline'
+                               '. |None| is a valid assignment value, but causes the run to inh'
+                               'erit its underline value. Assigning ``WD_UNDERLINE.NONE`` cause'
+                               's underlining to be unconditionally turned off.'
         ),
         XmlMappedEnumMember(
             'SINGLE', 1, 'single', 'A single line. Note that this setting is'
-            'write-only in the sense that |True| (rather than ``WD_UNDERLINE'
-            '.SINGLE``) is returned for a run having this setting.'
+                                   'write-only in the sense that |True| (rather than ``WD_UNDERLINE'
+                                   '.SINGLE``) is returned for a run having this setting.'
         ),
         XmlMappedEnumMember(
             'WORDS', 2, 'words', 'Underline individual words only.'
@@ -317,7 +322,7 @@ class WD_UNDERLINE(XmlEnumeration):
         ),
         XmlMappedEnumMember(
             'DOT_DOT_DASH', 10, 'dotDotDash', 'An alternating dot-dot-dash p'
-            'attern.'
+                                              'attern.'
         ),
         XmlMappedEnumMember(
             'WAVY', 11, 'wave', 'A single wavy line.'
@@ -330,11 +335,11 @@ class WD_UNDERLINE(XmlEnumeration):
         ),
         XmlMappedEnumMember(
             'DOT_DASH_HEAVY', 25, 'dashDotHeavy', 'Alternating heavy dots an'
-            'd heavy dashes.'
+                                                  'd heavy dashes.'
         ),
         XmlMappedEnumMember(
             'DOT_DOT_DASH_HEAVY', 26, 'dashDotDotHeavy', 'An alternating hea'
-            'vy dot-dot-dash pattern.'
+                                                         'vy dot-dot-dash pattern.'
         ),
         XmlMappedEnumMember(
             'WAVY_HEAVY', 27, 'wavyHeavy', 'A heavy wavy line.'

@@ -18,36 +18,36 @@ Table objects are constructed using the ``add_table()`` method on |Document|.
    :exclude-members: table
 
 
-|_Cell| objects
+|Cell| objects
 ------------------------
 
-.. autoclass:: _Cell
+.. autoclass:: Cell
    :members:
 
 
-|_Row| objects
+|Row| objects
 --------------
 
-.. autoclass:: _Row
+.. autoclass:: Row
    :members:
 
 
-|_Column| objects
+|Column| objects
 -----------------
 
-.. autoclass:: _Column
+.. autoclass:: Column
    :members:
 
 
-|_Rows| objects
+|Rows| objects
 ---------------
 
-.. autoclass:: _Rows
+.. autoclass:: Rows
    :members:
 
 
-|_Columns| objects
+|Columns| objects
 ------------------
 
-.. autoclass:: _Columns
+.. autoclass:: Columns
    :members:

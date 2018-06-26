@@ -77,7 +77,7 @@ rst_epilog = """
 
 .. |_Body| replace:: :class:`._Body`
 
-.. |_Cell| replace:: :class:`._Cell`
+.. |Cell| replace:: :class:`.Cell`
 
 .. |_CharacterStyle| replace:: :class:`._CharacterStyle`
 
@@ -85,9 +85,9 @@ rst_epilog = """
 
 .. |ColorFormat| replace:: :class:`.ColorFormat`
 
-.. |_Column| replace:: :class:`._Column`
+.. |Column| replace:: :class:`.Column`
 
-.. |_Columns| replace:: :class:`._Columns`
+.. |Columns| replace:: :class:`.Columns`
 
 .. |CoreProperties| replace:: :class:`.CoreProperties`
 
@@ -147,9 +147,9 @@ rst_epilog = """
 
 .. |RGBColor| replace:: :class:`.RGBColor`
 
-.. |_Row| replace:: :class:`._Row`
+.. |Row| replace:: :class:`.Row`
 
-.. |_Rows| replace:: :class:`._Rows`
+.. |Rows| replace:: :class:`.Rows`
 
 .. |Run| replace:: :class:`.Run`
 

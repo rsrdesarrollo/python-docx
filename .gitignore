@@ -6,3 +6,6 @@
 _scratch/
 Session.vim
 /.tox/
+.idea
+.pytest_cache
+venv

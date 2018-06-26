@@ -6,25 +6,9 @@ Base classes and other objects used by enumerations
 
 from __future__ import absolute_import, print_function
 
-import sys
 import textwrap
 
 from ..exceptions import InvalidXmlError
-
-
-def alias(*aliases):
-    """
-    Decorating a class with @alias('FOO', 'BAR', ..) allows the class to
-    be referenced by each of the names provided as arguments.
-    """
-    def decorator(cls):
-        # alias must be set in globals from caller's frame
-        caller = sys._getframe(1)
-        globals_dict = caller.f_globals
-        for alias in aliases:
-            globals_dict[alias] = cls
-        return cls
-    return decorator
 
 
 class _DocsPageFormatter(object):
@@ -33,6 +17,7 @@ class _DocsPageFormatter(object):
     class parts passed to the constructor. An immutable one-shot service
     object.
     """
+
     def __init__(self, clsname, clsdict):
         self._clsname = clsname
         self._clsdict = clsdict
@@ -69,8 +54,8 @@ class _DocsPageFormatter(object):
         """
         member_docstring = textwrap.dedent(member.docstring).strip()
         member_docstring = textwrap.fill(
-            member_docstring, width=78, initial_indent=' '*4,
-            subsequent_indent=' '*4
+            member_docstring, width=78, initial_indent=' ' * 4,
+            subsequent_indent=' ' * 4
         )
         return '%s\n%s\n' % (member.name, member_docstring)
 
@@ -100,7 +85,7 @@ class _DocsPageFormatter(object):
         The title for the documentation page, formatted as code (surrounded
         in double-backtics) and underlined with '=' characters
         """
-        title_underscore = '=' * (len(self._clsname)+4)
+        title_underscore = '=' * (len(self._clsname) + 4)
         return '``%s``\n%s' % (self._clsname, title_underscore)
 
 
@@ -110,6 +95,7 @@ class MetaEnumeration(type):
     named member and compiles state needed by the enumeration class to
     respond to other attribute gets
     """
+
     def __new__(meta, clsname, bases, clsdict):
         meta._add_enum_members(clsdict)
         meta._collect_valid_settings(clsdict)
@@ -211,6 +197,7 @@ class EnumMember(object):
     Used in the enumeration class definition to define a member value and its
     mappings
     """
+
     def __init__(self, name, value, docstring):
         self._name = name
         if isinstance(value, int):
@@ -275,6 +262,7 @@ class EnumValue(int):
     for its symbolic name and description, respectively. Subclasses int, so
     behaves as a regular int unless the strings are asked for.
     """
+
     def __new__(cls, member_name, int_value, docstring):
         return super(EnumValue, cls).__new__(cls, int_value)
 
@@ -302,6 +290,7 @@ class ReturnValueOnlyEnumMember(EnumMember):
     Used to define a member of an enumeration that is only valid as a query
     result and is not valid as a setting, e.g. MSO_VERTICAL_ANCHOR.MIXED (-2)
     """
+
     @property
     def valid_settings(self):
         """
@@ -314,6 +303,7 @@ class XmlMappedEnumMember(EnumMember):
     """
     Used to define a member whose value maps to an XML attribute value.
     """
+
     def __init__(self, name, value, xml_value, docstring):
         super(XmlMappedEnumMember, self).__init__(name, value, docstring)
         self._xml_value = xml_value

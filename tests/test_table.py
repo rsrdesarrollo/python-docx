@@ -14,7 +14,7 @@ from docx.oxml import parse_xml
 from docx.oxml.table import CT_Tc
 from docx.parts.document import DocumentPart
 from docx.shared import Inches
-from docx.table import _Cell, _Column, _Columns, _Row, _Rows, Table
+from docx.table import Cell, Column, Columns, Row, Rows, Table
 from docx.text.paragraph import Paragraph
 
 from .oxml.unitdata.table import a_gridCol, a_tbl, a_tblGrid, a_tc, a_tr
@@ -30,7 +30,7 @@ class DescribeTable(object):
         table, expected_xml = add_row_fixture
         row = table.add_row()
         assert table._tbl.xml == expected_xml
-        assert isinstance(row, _Row)
+        assert isinstance(row, Row)
         assert row._tr is table._tbl.tr_lst[-1]
         assert row._parent is table
 
@@ -38,7 +38,7 @@ class DescribeTable(object):
         table, width, expected_xml = add_column_fixture
         column = table.add_column(width)
         assert table._tbl.xml == expected_xml
-        assert isinstance(column, _Column)
+        assert isinstance(column, Column)
         assert column._gridCol is table._tbl.tblGrid.gridCol_lst[-1]
         assert column._parent is table
 
@@ -46,18 +46,18 @@ class DescribeTable(object):
         for row_idx in range(2):
             for col_idx in range(2):
                 cell = table.cell(row_idx, col_idx)
-                assert isinstance(cell, _Cell)
+                assert isinstance(cell, Cell)
                 tr = table._tbl.tr_lst[row_idx]
                 tc = tr.tc_lst[col_idx]
                 assert tc is cell._tc
 
     def it_provides_access_to_the_table_rows(self, table):
         rows = table.rows
-        assert isinstance(rows, _Rows)
+        assert isinstance(rows, Rows)
 
     def it_provides_access_to_the_table_columns(self, table):
         columns = table.columns
-        assert isinstance(columns, _Columns)
+        assert isinstance(columns, Columns)
 
     def it_provides_access_to_the_cells_in_a_column(self, col_cells_fixture):
         table, column_idx, expected_cells = col_cells_fixture
@@ -118,7 +118,7 @@ class DescribeTable(object):
 
     def it_provides_access_to_its_cells_to_help(self, cells_fixture):
         table, cell_count, unique_count, matches = cells_fixture
-        cells = table._cells
+        cells = table.cells
         assert len(cells) == cell_count
         assert len(set(cells)) == unique_count
         for matching_idxs in matches:
@@ -128,7 +128,7 @@ class DescribeTable(object):
 
     def it_knows_its_column_count_to_help(self, column_count_fixture):
         table, expected_value = column_count_fixture
-        column_count = table._column_count
+        column_count = table.column_count
         assert column_count == expected_value
 
     # fixtures -------------------------------------------------------
@@ -301,11 +301,11 @@ class DescribeTable(object):
 
     @pytest.fixture
     def _cells_(self, request):
-        return property_mock(request, Table, '_cells')
+        return property_mock(request, Table, 'cells')
 
     @pytest.fixture
     def _column_count_(self, request):
-        return property_mock(request, Table, '_column_count')
+        return property_mock(request, Table, 'column_count')
 
     @pytest.fixture
     def document_part_(self, request):
@@ -387,7 +387,7 @@ class Describe_Cell(object):
         cell, other_cell, merged_tc_ = merge_fixture
         merged_cell = cell.merge(other_cell)
         cell._tc.merge.assert_called_once_with(other_cell._tc)
-        assert isinstance(merged_cell, _Cell)
+        assert isinstance(merged_cell, Cell)
         assert merged_cell._tc is merged_tc_
         assert merged_cell._parent is cell._parent
 
@@ -400,25 +400,25 @@ class Describe_Cell(object):
     ])
     def add_paragraph_fixture(self, request):
         tc_cxml, after_tc_cxml = request.param
-        cell = _Cell(element(tc_cxml), None)
+        cell = Cell(element(tc_cxml), None)
         expected_xml = xml(after_tc_cxml)
         return cell, expected_xml
 
     @pytest.fixture
     def add_table_fixture(self, request):
-        cell = _Cell(element('w:tc/w:p'), None)
+        cell = Cell(element('w:tc/w:p'), None)
         expected_xml = snippet_seq('new-tbl')[1]
         return cell, expected_xml
 
     @pytest.fixture
     def merge_fixture(self, tc_, tc_2_, parent_, merged_tc_):
-        cell, other_cell = _Cell(tc_, parent_), _Cell(tc_2_, parent_)
+        cell, other_cell = Cell(tc_, parent_), Cell(tc_2_, parent_)
         tc_.merge.return_value = merged_tc_
         return cell, other_cell, merged_tc_
 
     @pytest.fixture
     def paragraphs_fixture(self):
-        return _Cell(element('w:tc/(w:p, w:p)'), None)
+        return Cell(element('w:tc/(w:p, w:p)'), None)
 
     @pytest.fixture(params=[
         ('w:tc',                   0),
@@ -429,7 +429,7 @@ class Describe_Cell(object):
     ])
     def tables_fixture(self, request):
         cell_cxml, expected_count = request.param
-        cell = _Cell(element(cell_cxml), None)
+        cell = Cell(element(cell_cxml), None)
         return cell, expected_count
 
     @pytest.fixture(params=[
@@ -442,7 +442,7 @@ class Describe_Cell(object):
     ])
     def text_get_fixture(self, request):
         tc_cxml, expected_text = request.param
-        cell = _Cell(element(tc_cxml), None)
+        cell = Cell(element(tc_cxml), None)
         return cell, expected_text
 
     @pytest.fixture(params=[
@@ -455,7 +455,7 @@ class Describe_Cell(object):
     ])
     def text_set_fixture(self, request):
         tc_cxml, new_text, expected_cxml = request.param
-        cell = _Cell(element(tc_cxml), None)
+        cell = Cell(element(tc_cxml), None)
         expected_xml = xml(expected_cxml)
         return cell, new_text, expected_xml
 
@@ -467,7 +467,7 @@ class Describe_Cell(object):
     ])
     def width_get_fixture(self, request):
         tc_cxml, expected_width = request.param
-        cell = _Cell(element(tc_cxml), None)
+        cell = Cell(element(tc_cxml), None)
         return cell, expected_width
 
     @pytest.fixture(params=[
@@ -478,7 +478,7 @@ class Describe_Cell(object):
     ])
     def width_set_fixture(self, request):
         tc_cxml, new_value, expected_cxml = request.param
-        cell = _Cell(element(tc_cxml), None)
+        cell = Cell(element(tc_cxml), None)
         expected_xml = xml(expected_cxml)
         return cell, new_value, expected_xml
 
@@ -531,7 +531,7 @@ class Describe_Column(object):
 
     @pytest.fixture
     def cells_fixture(self, _index_, table_prop_, table_):
-        column = _Column(None, None)
+        column = Column(None, None)
         _index_.return_value = column_idx = 4
         expected_cells = (3, 2, 1)
         table_.column_cells.return_value = list(expected_cells)
@@ -541,12 +541,12 @@ class Describe_Column(object):
     def index_fixture(self):
         tbl = element('w:tbl/w:tblGrid/(w:gridCol,w:gridCol,w:gridCol)')
         gridCol, expected_idx = tbl.tblGrid[1], 1
-        column = _Column(gridCol, None)
+        column = Column(gridCol, None)
         return column, expected_idx
 
     @pytest.fixture
     def table_fixture(self, parent_, table_):
-        column = _Column(None, parent_)
+        column = Column(None, parent_)
         parent_.table = table_
         return column, table_
 
@@ -560,7 +560,7 @@ class Describe_Column(object):
     ])
     def width_get_fixture(self, request):
         gridCol_cxml, expected_width = request.param
-        column = _Column(element(gridCol_cxml), None)
+        column = Column(element(gridCol_cxml), None)
         return column, expected_width
 
     @pytest.fixture(params=[
@@ -571,7 +571,7 @@ class Describe_Column(object):
     ])
     def width_set_fixture(self, request):
         gridCol_cxml, new_value, expected_cxml = request.param
-        column = _Column(element(gridCol_cxml), None)
+        column = Column(element(gridCol_cxml), None)
         expected_xml = xml(expected_cxml)
         return column, new_value, expected_xml
 
@@ -579,7 +579,7 @@ class Describe_Column(object):
 
     @pytest.fixture
     def _index_(self, request):
-        return property_mock(request, _Column, '_index')
+        return property_mock(request, Column, '_index')
 
     @pytest.fixture
     def parent_(self, request):
@@ -591,7 +591,7 @@ class Describe_Column(object):
 
     @pytest.fixture
     def table_prop_(self, request, table_):
-        return property_mock(request, _Column, 'table', return_value=table_)
+        return property_mock(request, Column, 'table', return_value=table_)
 
 
 class Describe_Columns(object):
@@ -604,7 +604,7 @@ class Describe_Columns(object):
         columns, column_count = columns_fixture
         actual_count = 0
         for column in columns:
-            assert isinstance(column, _Column)
+            assert isinstance(column, Column)
             actual_count += 1
         assert actual_count == column_count
 
@@ -612,7 +612,7 @@ class Describe_Columns(object):
         columns, column_count = columns_fixture
         for idx in range(-column_count, column_count):
             column = columns[idx]
-            assert isinstance(column, _Column)
+            assert isinstance(column, Column)
 
     def it_raises_on_indexed_access_out_of_range(self, columns_fixture):
         columns, column_count = columns_fixture
@@ -633,12 +633,12 @@ class Describe_Columns(object):
     def columns_fixture(self):
         column_count = 2
         tbl = _tbl_bldr(rows=2, cols=column_count).element
-        columns = _Columns(tbl, None)
+        columns = Columns(tbl, None)
         return columns, column_count
 
     @pytest.fixture
     def table_fixture(self, table_):
-        columns = _Columns(None, table_)
+        columns = Columns(None, table_)
         table_.table = table_
         return columns, table_
 
@@ -669,7 +669,7 @@ class Describe_Row(object):
 
     @pytest.fixture
     def cells_fixture(self, _index_, table_prop_, table_):
-        row = _Row(None, None)
+        row = Row(None, None)
         _index_.return_value = row_idx = 6
         expected_cells = (1, 2, 3)
         table_.row_cells.return_value = list(expected_cells)
@@ -679,12 +679,12 @@ class Describe_Row(object):
     def idx_fixture(self):
         tbl = element('w:tbl/(w:tr,w:tr,w:tr)')
         tr, expected_idx = tbl[1], 1
-        row = _Row(tr, None)
+        row = Row(tr, None)
         return row, expected_idx
 
     @pytest.fixture
     def table_fixture(self, parent_, table_):
-        row = _Row(None, parent_)
+        row = Row(None, parent_)
         parent_.table = table_
         return row, table_
 
@@ -692,7 +692,7 @@ class Describe_Row(object):
 
     @pytest.fixture
     def _index_(self, request):
-        return property_mock(request, _Row, '_index')
+        return property_mock(request, Row, '_index')
 
     @pytest.fixture
     def parent_(self, request):
@@ -704,7 +704,7 @@ class Describe_Row(object):
 
     @pytest.fixture
     def table_prop_(self, request, table_):
-        return property_mock(request, _Row, 'table', return_value=table_)
+        return property_mock(request, Row, 'table', return_value=table_)
 
 
 class Describe_Rows(object):
@@ -717,7 +717,7 @@ class Describe_Rows(object):
         rows, row_count = rows_fixture
         actual_count = 0
         for row in rows:
-            assert isinstance(row, _Row)
+            assert isinstance(row, Row)
             actual_count += 1
         assert actual_count == row_count
 
@@ -725,7 +725,7 @@ class Describe_Rows(object):
         rows, row_count = rows_fixture
         for idx in range(-row_count, row_count):
             row = rows[idx]
-            assert isinstance(row, _Row)
+            assert isinstance(row, Row)
 
     def it_provides_sliced_access_to_rows(self, slice_fixture):
         rows, start, end, expected_count = slice_fixture
@@ -734,7 +734,7 @@ class Describe_Rows(object):
         tr_lst = rows._tbl.tr_lst
         for idx, row in enumerate(slice_of_rows):
             assert tr_lst.index(row._tr) == start + idx
-            assert isinstance(row, _Row)
+            assert isinstance(row, Row)
 
     def it_raises_on_indexed_access_out_of_range(self, rows_fixture):
         rows, row_count = rows_fixture
@@ -755,7 +755,7 @@ class Describe_Rows(object):
     def rows_fixture(self):
         row_count = 2
         tbl = _tbl_bldr(rows=row_count, cols=2).element
-        rows = _Rows(tbl, None)
+        rows = Rows(tbl, None)
         return rows, row_count
 
     @pytest.fixture(params=[
@@ -765,12 +765,12 @@ class Describe_Rows(object):
     def slice_fixture(self, request):
         row_count, start, end, expected_count = request.param
         tbl = _tbl_bldr(rows=row_count, cols=2).element
-        rows = _Rows(tbl, None)
+        rows = Rows(tbl, None)
         return rows, start, end, expected_count
 
     @pytest.fixture
     def table_fixture(self, table_):
-        rows = _Rows(None, table_)
+        rows = Rows(None, table_)
         table_.table = table_
         return rows, table_
 

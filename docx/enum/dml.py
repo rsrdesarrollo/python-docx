@@ -7,7 +7,7 @@ Enumerations used by DrawingML objects
 from __future__ import absolute_import
 
 from .base import (
-    alias, Enumeration, EnumMember, XmlEnumeration, XmlMappedEnumMember
+    Enumeration, EnumMember, XmlEnumeration, XmlMappedEnumMember
 )
 
 
@@ -38,12 +38,11 @@ class MSO_COLOR_TYPE(Enumeration):
         ),
         EnumMember(
             'AUTO', 101, 'Color is determined automatically by the '
-            'application.'
+                         'application.'
         ),
     )
 
 
-@alias('MSO_THEME_COLOR')
 class MSO_THEME_COLOR_INDEX(XmlEnumeration):
     """
     Indicates the Office theme color, one of those shown in the color gallery
@@ -89,11 +88,11 @@ class MSO_THEME_COLOR_INDEX(XmlEnumeration):
         ),
         XmlMappedEnumMember(
             'BACKGROUND_1', 14, 'background1', 'Specifies the Background 1 '
-            'theme color.'
+                                               'theme color.'
         ),
         XmlMappedEnumMember(
             'BACKGROUND_2', 16, 'background2', 'Specifies the Background 2 '
-            'theme color.'
+                                               'theme color.'
         ),
         XmlMappedEnumMember(
             'DARK_1', 1, 'dark1', 'Specifies the Dark 1 theme color.'
@@ -103,11 +102,11 @@ class MSO_THEME_COLOR_INDEX(XmlEnumeration):
         ),
         XmlMappedEnumMember(
             'FOLLOWED_HYPERLINK', 12, 'followedHyperlink', 'Specifies the '
-            'theme color for a clicked hyperlink.'
+                                                           'theme color for a clicked hyperlink.'
         ),
         XmlMappedEnumMember(
             'HYPERLINK', 11, 'hyperlink', 'Specifies the theme color for a '
-            'hyperlink.'
+                                          'hyperlink.'
         ),
         XmlMappedEnumMember(
             'LIGHT_1', 2, 'light1', 'Specifies the Light 1 theme color.'
@@ -122,3 +121,6 @@ class MSO_THEME_COLOR_INDEX(XmlEnumeration):
             'TEXT_2', 15, 'text2', 'Specifies the Text 2 theme color.'
         ),
     )
+
+
+MSO_THEME_COLOR = MSO_THEME_COLOR_INDEX

@@ -13,7 +13,7 @@ from behave import given, then, when
 from docx import Document
 from docx.enum.table import WD_TABLE_ALIGNMENT, WD_TABLE_DIRECTION
 from docx.shared import Inches
-from docx.table import _Column, _Columns, _Row, _Rows
+from docx.table import Column, Columns, Row, Rows
 
 from helpers import test_docx
 
@@ -221,7 +221,7 @@ def then_can_access_collection_column_by_index(context):
     columns = context.columns
     for idx in range(2):
         column = columns[idx]
-        assert isinstance(column, _Column)
+        assert isinstance(column, Column)
 
 
 @then('I can access a collection row by index')
@@ -229,21 +229,21 @@ def then_can_access_collection_row_by_index(context):
     rows = context.rows
     for idx in range(2):
         row = rows[idx]
-        assert isinstance(row, _Row)
+        assert isinstance(row, Row)
 
 
 @then('I can access the column collection of the table')
 def then_can_access_column_collection_of_table(context):
     table = context.table_
     columns = table.columns
-    assert isinstance(columns, _Columns)
+    assert isinstance(columns, Columns)
 
 
 @then('I can access the row collection of the table')
 def then_can_access_row_collection_of_table(context):
     table = context.table_
     rows = table.rows
-    assert isinstance(rows, _Rows)
+    assert isinstance(rows, Rows)
 
 
 @then('I can iterate over the column collection')
@@ -252,7 +252,7 @@ def then_can_iterate_over_column_collection(context):
     actual_count = 0
     for column in columns:
         actual_count += 1
-        assert isinstance(column, _Column)
+        assert isinstance(column, Column)
     assert actual_count == 2
 
 
@@ -262,7 +262,7 @@ def then_can_iterate_over_row_collection(context):
     actual_count = 0
     for row in rows:
         actual_count += 1
-        assert isinstance(row, _Row)
+        assert isinstance(row, Row)
     assert actual_count == 2
 
 
@@ -396,7 +396,7 @@ def then_the_width_of_cell_n_is_x_inches(context, n_str, inches_str):
 def then_the_width_of_each_cell_is_inches(context, inches):
     table = context.table_
     expected_width = Inches(float(inches))
-    for cell in table._cells:
+    for cell in table.cells:
         assert cell.width == expected_width, 'got %s' % cell.width.inches
 
 

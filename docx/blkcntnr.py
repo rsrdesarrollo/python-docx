@@ -16,7 +16,7 @@ from .text.paragraph import Paragraph
 class BlockItemContainer(Parented):
     """
     Base class for proxy objects that can contain block items, such as _Body,
-    _Cell, header, footer, footnote, endnote, comment, and text box objects.
+    Cell, header, footer, footnote, endnote, comment, and text box objects.
     Provides the shared functionality to add a block item like a paragraph or
     table.
     """

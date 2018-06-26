@@ -6,10 +6,9 @@ Enumerations related to styles
 
 from __future__ import absolute_import, print_function, unicode_literals
 
-from .base import alias, EnumMember, XmlEnumeration, XmlMappedEnumMember
+from .base import EnumMember, XmlEnumeration, XmlMappedEnumMember
 
 
-@alias('WD_STYLE')
 class WD_BUILTIN_STYLE(XmlEnumeration):
     """
     alias: **WD_STYLE**
@@ -430,6 +429,9 @@ class WD_BUILTIN_STYLE(XmlEnumeration):
             'TOC_9', -28, 'TOC 9.'
         ),
     )
+
+
+WD_STYLE = WD_BUILTIN_STYLE
 
 
 class WD_STYLE_TYPE(XmlEnumeration):
